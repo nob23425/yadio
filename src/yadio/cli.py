@@ -1,24 +1,38 @@
 import typer
-
+from yadio.yadio import YadioApi as yadio
+from typing import Optional
 app = typer.Typer(help="Mi app de ejemplo con Typer")
 
 
 @app.command()
-def saludar(nombre: str):
+def ping():
     """
-    Saluda a alguien por su nombre.
+    Checks the server status.
     """
-    typer.echo(f"¡Hola, {nombre}!")
+    response = yadio.ping_server()
+    typer.echo(response)
 
 
 @app.command()
-def saludar_rep(nombre: str, repetir: int = 1):
-    """
-    Saluda varias veces a alguien.
-    """
-    for i in range(repetir):
-        typer.echo(f"¡Hola ({i + 1}) {nombre}!")
+def convert(amount: float, currency_from: str, currency_to: str):
+    """ """
+    response = yadio.get_convert(amount, currency_from, currency_to)
+    typer.echo(response)
 
+@app.command()
+def rate(quote : str , base: str):
+    response= yadio.get_rate( quote , base)
+    typer.echo(response)
+
+@app.command()
+def exrates(currency : str = Optional[str]):
+    response= yadio.get_exrates(currency)
+    typer.echo(response)
+
+@app.command()
+def currencies():
+    response= yadio.get_currencies()
+    typer.echo(response)
 
 if __name__ == "__main__":
     app()
